@@ -5,3 +5,27 @@ id,text,category,time_to_first_response_min,resolved
 4,"This is the third bug this month, thinking about cancelling",churn-risk,90,N
 5,"Where do I download my invoice?",how-to,10,Y
 6,"Cannot reset my password",bug,30,Y
+7,"Why was I billed for two seats when I only use one?",billing,60,Y
+8,"Export to CSV is broken, second time this week",bug,150,N
+9,"How do I change my plan from monthly to annual?",how-to,8,Y
+10,"Your competitor is cheaper and your support is slower, reconsidering",churn-risk,110,N
+11,"Invoice PDF has the wrong company name",billing,40,Y
+12,"Dashboard won't load, stuck on spinner",bug,95,N
+13,"How do I set up SSO for my team?",how-to,25,Y
+14,"Can I get a refund for last month, we barely used it",billing,55,Y
+15,"Integration with Slack stopped working after your last update",bug,130,N
+16,"What's the difference between the Pro and Business plans?",how-to,12,Y
+17,"We've had three outages this quarter, evaluating alternatives",churn-risk,140,N
+18,"Charged the wrong currency on my last invoice",billing,50,Y
+19,"How do I remove a teammate from the workspace?",how-to,9,Y
+20,"App keeps logging me out every few minutes",bug,105,N
+21,"Can you explain what's included in the annual discount?",how-to,14,Y
+22,"This is unacceptable, my team can't work, considering cancelling today",churn-risk,20,Y
+23,"Duplicate charge again this month, second time in a row",billing,35,Y
+24,"Search feature returns no results for valid queries",bug,85,N
+25,"How do I export my data before my trial ends?",how-to,11,Y
+26,"Your onboarding was confusing, we almost churned in week one",churn-risk,70,Y
+27,"Billing page shows an incorrect renewal date",billing,42,Y
+28,"File upload silently fails with no error message",bug,115,N
+29,"How do I set custom permissions for a teammate?",how-to,18,Y
+30,"We're moving to a competitor next renewal, the bugs are too frequent",churn-risk,160,N
