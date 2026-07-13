@@ -1,0 +1,6 @@
+id,text,category,time_to_first_response_min,resolved
+1,"I was charged twice this month",billing,45,Y
+2,"App crashes when I upload a CSV over 10MB",bug,120,N
+3,"How do I add a teammate to my workspace?",how-to,15,Y
+4,"This is the third bug this month, thinking about cancelling",churn-risk,90,N
+5,"Where do I download my invoice?",how-to,10,Y
