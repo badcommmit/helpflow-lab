@@ -1,0 +1,21 @@
+id,text,true_category
+1,"You charged my card three times for one order",billing
+2,"The app won't open at all since the last update",bug
+3,"How do I turn on dark mode?",how-to
+4,"I've been a customer for 2 years and this is the last straw",churn-risk
+5,"Where is the settings menu located?",how-to
+6,"My data disappeared after the sync failed",bug
+7,"I don't understand this line item on my bill",billing
+8,"Not renewing next year unless something changes",churn-risk
+9,"Can I merge two accounts into one?",how-to
+10,"Everything is broken and nobody is helping me",needs-human-review
+11,"You promised a discount and I never got it",billing
+12,"The mobile app force-closes every time I open notifications",bug
+13,"What happens to my data if I downgrade my plan?",how-to
+14,"I'm switching to your competitor at the end of this cycle",churn-risk
+15,"Payment failed but you still charged me",billing
+16,"none of this makes sense to me",needs-human-review
+17,"How long is data retained after account deletion?",how-to
+18,"Third outage this week, I'm losing customers because of you",churn-risk
+19,"The upload button does nothing when clicked",bug
+20,"I need help but don't know where to start",needs-human-review
