@@ -10,7 +10,7 @@ Given raw ticket text, output exactly this structure:
 - **category**: one of billing | bug | how-to | churn-risk
 - **priority**: high | medium | low
   - churn-risk is always high priority
-  - bug is high if it mentions crashes/data loss, medium otherwise
+  - bug is high by default (bug tickets have the worst resolution rate in this dataset). Downgrade to medium only for minor cosmetic issues with no functional impact (e.g. UI text, spacing, colors).
   - billing is medium unless it mentions a repeat/duplicate charge, then high
   - how-to is always low
 - **suggested_response_draft**: 2-3 sentence draft reply, empathetic tone, acknowledges the issue and states next step (do not promise specific resolution times)
