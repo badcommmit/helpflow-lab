@@ -25,3 +25,6 @@ as a real miss.
   response at all — fixed in Module 6 by adding `suggested_response_draft`
   to the Slack message, closing the gap between "AI drafts" (design) and
   what the build actually showed a human.
+
+## Update: needs-human-review gap fixed
+Originally, needs-human-review tickets fell into the same fallback branch as bug/how-to (auto-drafted, no escalation) — contradicting this table's own AI-never judgment for that category. Fixed by adding a dedicated Switch branch: needs-human-review tickets now post to Slack with no auto-draft, flagged for manual categorization.
