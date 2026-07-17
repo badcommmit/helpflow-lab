@@ -28,3 +28,6 @@ as a real miss.
 
 ## Update: needs-human-review gap fixed
 Originally, needs-human-review tickets fell into the same fallback branch as bug/how-to (auto-drafted, no escalation) — contradicting this table's own AI-never judgment for that category. Fixed by adding a dedicated Switch branch: needs-human-review tickets now post to Slack with no auto-draft, flagged for manual categorization.
+
+## Update: bug severity split built
+Bug tickets now split into bug-minor (full-auto, cosmetic issues only: color/spacing/text/alignment keywords) and bug-severe (everything else, routed to a dedicated Slack alert with a distinct message template, tagged for human review). This gives the "exit condition to a human" promised in the Module 7 pitch a real, tested implementation rather than just a stated intention.
