@@ -11,8 +11,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        0,
-        208
+        -496,
+        384
       ],
       "id": "9e63f536-a9db-4f45-9238-6e52cb417bcf",
       "name": "Webhook",
@@ -20,13 +20,13 @@
     },
     {
       "parameters": {
-        "jsCode": "const text = $json.body.text.toLowerCase();\n\nlet category, priority, note = null;\n\nconst churnSignals = ['cancel', 'competitor', 'evaluating alternatives', 'moving to'];\nconst billingSignals = ['charge', 'invoice', 'billed', 'refund', 'billing'];\nconst bugSignals = ['crash', 'broken', 'error', 'fails', 'bug', 'won\\'t load', 'stuck'];\nconst howtoSignals = ['how do i', 'how to', 'what is', \"what's the difference\"];\n\nconst isChurn = churnSignals.some(s => text.includes(s));\nconst isBilling = billingSignals.some(s => text.includes(s));\nconst isBug = bugSignals.some(s => text.includes(s));\nconst isHowto = howtoSignals.some(s => text.includes(s));\n\nconst matchCount = [isChurn, isBilling, isBug, isHowto].filter(Boolean).length;\n\nif (matchCount === 0 || matchCount > 1 && !isChurn) {\n  category = 'needs-human-review';\n  priority = 'n/a';\n  note = 'Ambiguous or no clear category signal — mocked logic, needs human judgment';\n} else if (isChurn) {\n  category = 'churn-risk';\n  priority = 'high';\n} else if (isBug) {\n  category = 'bug';\n  priority = (text.includes('crash') || text.includes('data loss')) ? 'high' : 'medium';\n} else if (isBilling) {\n  category = 'billing';\n  priority = (text.includes('duplicate') || text.includes('twice') || text.includes('again')) ? 'high' : 'medium';\n} else {\n  category = 'how-to';\n  priority = 'low';\n}\n\nconst drafts = {\n  billing: `We're looking into the charge on your account and will follow up with a breakdown.`,\n  bug: `We're sorry for the trouble — this has been flagged for our engineering team.`,\n  'how-to': `Here's how to do that — check our help docs for step-by-step instructions.`,\n  'churn-risk': `We don't want to lose you — someone from our team will reach out personally.`\n};\n\nconst suggested_response_draft = drafts[category] || null;\n\nreturn {\n  json: {\n    id: $json.body.id || null,\n    text: $json.body.text,\n    category,\n    priority,\n    note,\n    suggested_response_draft\n  }\n};"
+        "jsCode": "const text = $json.body.text.toLowerCase();\nlet category, priority, note = null;\nconst churnSignals = ['cancel', 'competitor', 'evaluating alternatives', 'moving to'];\nconst billingSignals = ['charge', 'invoice', 'billed', 'refund', 'billing'];\nconst bugSignals = ['crash', 'broken', 'error', 'fails', 'bug', 'won\\'t load', 'stuck'];\nconst howtoSignals = ['how do i', 'how to', 'what is', \"what's the difference\"];\nconst isChurn = churnSignals.some(s => text.includes(s));\nconst isBilling = billingSignals.some(s => text.includes(s));\nconst isBug = bugSignals.some(s => text.includes(s));\nconst isHowto = howtoSignals.some(s => text.includes(s));\nconst matchCount = [isChurn, isBilling, isBug, isHowto].filter(Boolean).length;\nif (matchCount === 0 || matchCount > 1 && !isChurn) {\n  category = 'needs-human-review';\n  priority = 'n/a';\n  note = 'Ambiguous or no clear category signal — mocked logic, needs human judgment';\n} else if (isChurn) {\n  category = 'churn-risk';\n  priority = 'high';\n} else if (isBug) {\n  // bug is high by default (bug tickets have the worst resolution rate\n  // in this dataset). Downgrade to medium/minor only for cosmetic issues\n  // with no functional impact.\n  const isMinorCosmetic = text.includes('color') || text.includes('spacing') || text.includes('text') || text.includes('alignment');\n  category = isMinorCosmetic ? 'bug-minor' : 'bug-severe';\n  priority = isMinorCosmetic ? 'medium' : 'high';\n  note = isMinorCosmetic ? null : 'Severe bug: routed to human review rather than auto-drafted.';\n} else if (isBilling) {\n  category = 'billing';\n  priority = (text.includes('duplicate') || text.includes('twice') || text.includes('again')) ? 'high' : 'medium';\n} else {\n  category = 'how-to';\n  priority = 'low';\n}\nconst drafts = {\n  billing: `We're looking into the charge on your account and will follow up with a breakdown.`,\n  'bug-minor': `Thanks for flagging this - we've noted the issue and it will be reviewed by our team.`,\n  'bug-severe': `We're sorry for the trouble - this has been flagged for our engineering team.`,\n  'how-to': `Here's how to do that - check our help docs for step-by-step instructions.`,\n  'churn-risk': `We don't want to lose you - someone from our team will reach out personally.`\n};\nconst suggested_response_draft = drafts[category] || null;\nreturn {\n  json: {\n    id: $json.body.id || null,\n    text: $json.body.text,\n    category,\n    priority,\n    note,\n    suggested_response_draft\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        224,
-        208
+        -272,
+        384
       ],
       "id": "10c314e2-5b60-4c71-abff-32b270af124c",
       "name": "Code in JavaScript"
@@ -102,6 +102,29 @@
                 ],
                 "combinator": "and"
               }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "823b22c9-ab08-4e2b-9e86-909ebb3af1ab",
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "bug-severe",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
             }
           ]
         },
@@ -112,38 +135,11 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        448,
-        176
+        -48,
+        336
       ],
       "id": "f9dbded3-50b7-4b62-b14c-fb0153f6db47",
       "name": "Switch"
-    },
-    {
-      "parameters": {
-        "select": "channel",
-        "channelId": {
-          "__rl": true,
-          "value": "#billing-alerts",
-          "mode": "name"
-        },
-        "text": "=New billing ticket: {{ $json.text }}\nSuggested response: {{ $json.suggested_response_draft }}",
-        "otherOptions": {}
-      },
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.5,
-      "position": [
-        672,
-        -80
-      ],
-      "id": "f5b7f23d-680a-4cf7-af7a-4cbf8d532738",
-      "name": "Send a message",
-      "webhookId": "REDACTED",
-      "credentials": {
-        "slackApi": {
-          "id": "REDACTED",
-          "name": "Slack account"
-        }
-      }
     },
     {
       "parameters": {
@@ -163,8 +159,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        672,
-        304
+        688,
+        688
       ],
       "id": "609f166c-ea01-4c6e-86cb-f33173102850",
       "name": "Edit Fields"
@@ -187,8 +183,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        672,
-        496
+        688,
+        1056
       ],
       "id": "053fb06e-e4d2-4a49-b30a-6b6abd5a1e77",
       "name": "Edit Fields1"
@@ -278,8 +274,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        896,
-        400
+        1232,
+        640
       ],
       "id": "8591043e-2046-4714-a6f1-305712b33d62",
       "name": "Append row in sheet",
@@ -316,33 +312,6 @@
     },
     {
       "parameters": {
-        "select": "channel",
-        "channelId": {
-          "__rl": true,
-          "value": "#needs-review",
-          "mode": "name"
-        },
-        "text": "=Ticket needs manual review — cannot auto-categorize: {{ $json.text }}.\n{{ $json.note }}",
-        "otherOptions": {}
-      },
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.5,
-      "position": [
-        672,
-        112
-      ],
-      "id": "b39edcda-6580-4177-b60c-1457afd0d845",
-      "name": "Send a message1",
-      "webhookId": "REDACTED",
-      "credentials": {
-        "slackApi": {
-          "id": "REDACTED",
-          "name": "Slack account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "assignments": {
           "assignments": [
             {
@@ -359,11 +328,116 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        672,
-        688
+        688,
+        880
       ],
       "id": "dd7eaf30-ebdf-49e2-9576-1bea97e04f1d",
       "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2245bc49-e600-4838-96b5-c03c50aaacae",
+              "name": "action",
+              "value": "flagged for human review, severe bug",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        112
+      ],
+      "id": "4bbed335-1de8-4ffc-9086-475781101a29",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#bug-alerts",
+          "mode": "name"
+        },
+        "text": "=Severe bug reported: {{ $json.text }}\nSuggested response: {{ $json.suggested_response_draft }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        688,
+        288
+      ],
+      "id": "76b8fd3f-702d-4cce-bcbe-9a0ab705372d",
+      "name": "#bug-alerts",
+      "webhookId": "REDACTED",
+      "credentials": {
+        "slackApi": {
+          "id": "REDACTED",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#needs-review",
+          "mode": "name"
+        },
+        "text": "=Ticket needs manual review — cannot auto-categorize: {{ $json.text }}.\n{{ $json.note }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        688,
+        480
+      ],
+      "id": "b39edcda-6580-4177-b60c-1457afd0d845",
+      "name": "#needs-review",
+      "webhookId": "REDACTED",
+      "credentials": {
+        "slackApi": {
+          "id": "REDACTED",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#billing-alerts",
+          "mode": "name"
+        },
+        "text": "=New billing ticket: {{ $json.text }}\nSuggested response: {{ $json.suggested_response_draft }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        672,
+        -80
+      ],
+      "id": "f5b7f23d-680a-4cf7-af7a-4cbf8d532738",
+      "name": "#billing-alerts",
+      "webhookId": "REDACTED",
+      "credentials": {
+        "slackApi": {
+          "id": "REDACTED",
+          "name": "Slack account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -394,7 +468,7 @@
       "main": [
         [
           {
-            "node": "Send a message",
+            "node": "#billing-alerts",
             "type": "main",
             "index": 0
           },
@@ -413,7 +487,7 @@
         ],
         [
           {
-            "node": "Send a message1",
+            "node": "#needs-review",
             "type": "main",
             "index": 0
           },
@@ -425,16 +499,23 @@
         ],
         [
           {
+            "node": "#bug-alerts",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
             "node": "Edit Fields1",
             "type": "main",
             "index": 0
           }
         ]
-      ]
-    },
-    "Send a message": {
-      "main": [
-        []
       ]
     },
     "Edit Fields": {
@@ -485,6 +566,22 @@
           }
         ]
       ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "#billing-alerts": {
+      "main": [
+        []
+      ]
     }
   },
   "active": false,
@@ -493,7 +590,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "0ef829a1-7abb-4f74-ac4f-cdb3f5c7d9f9",
+  "versionId": "5e37f9f0-40a5-41fc-a2dc-28511d206d56",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "0b62203b239dd9374eb92287a8c78bb630416bb0e34c81946eab6e3bed300c46"
