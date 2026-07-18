@@ -12,7 +12,7 @@
       "typeVersion": 2.1,
       "position": [
         -496,
-        384
+        400
       ],
       "id": "9e63f536-a9db-4f45-9238-6e52cb417bcf",
       "name": "Webhook",
@@ -26,7 +26,7 @@
       "typeVersion": 2,
       "position": [
         -272,
-        384
+        400
       ],
       "id": "10c314e2-5b60-4c71-abff-32b270af124c",
       "name": "Code in JavaScript"
@@ -136,58 +136,10 @@
       "typeVersion": 3.4,
       "position": [
         -48,
-        336
+        352
       ],
       "id": "f9dbded3-50b7-4b62-b14c-fb0153f6db47",
       "name": "Switch"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "42678f42-82b4-4949-b612-de9ef34552c1",
-              "name": "action",
-              "value": "would tag @support-lead for human review",
-              "type": "string"
-            }
-          ]
-        },
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        688,
-        688
-      ],
-      "id": "609f166c-ea01-4c6e-86cb-f33173102850",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "c673af68-9b11-4ae2-a45d-41b4c5726d20",
-              "name": "action",
-              "value": "auto-drafted response, no escalation needed",
-              "type": "string"
-            }
-          ]
-        },
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        688,
-        1056
-      ],
-      "id": "053fb06e-e4d2-4a49-b30a-6b6abd5a1e77",
-      "name": "Edit Fields1"
     },
     {
       "parameters": {
@@ -274,8 +226,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1232,
-        640
+        400,
+        688
       ],
       "id": "8591043e-2046-4714-a6f1-305712b33d62",
       "name": "Append row in sheet",
@@ -285,78 +237,6 @@
           "name": "Google Sheets account"
         }
       }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "2245bc49-e600-4838-96b5-c03c50aaacae",
-              "name": "action",
-              "value": "posted to #billing-alerts Slack channel",
-              "type": "string"
-            }
-          ]
-        },
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        672,
-        -272
-      ],
-      "id": "0cec07bd-744d-4e92-9ad8-ef389f7aa57b",
-      "name": "Edit Fields2"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "72c01a73-647d-4bda-aa4b-9a9a7421f541",
-              "name": "action",
-              "value": "flagged for manual categorization, no auto-draft sent",
-              "type": "string"
-            }
-          ]
-        },
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        688,
-        880
-      ],
-      "id": "dd7eaf30-ebdf-49e2-9576-1bea97e04f1d",
-      "name": "Edit Fields3"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "2245bc49-e600-4838-96b5-c03c50aaacae",
-              "name": "action",
-              "value": "flagged for human review, severe bug",
-              "type": "string"
-            }
-          ]
-        },
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        672,
-        112
-      ],
-      "id": "4bbed335-1de8-4ffc-9086-475781101a29",
-      "name": "Edit Fields4"
     },
     {
       "parameters": {
@@ -372,8 +252,8 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.5,
       "position": [
-        688,
-        288
+        176,
+        304
       ],
       "id": "76b8fd3f-702d-4cce-bcbe-9a0ab705372d",
       "name": "#bug-alerts",
@@ -399,8 +279,8 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.5,
       "position": [
-        688,
-        480
+        176,
+        496
       ],
       "id": "b39edcda-6580-4177-b60c-1457afd0d845",
       "name": "#needs-review",
@@ -426,7 +306,7 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.5,
       "position": [
-        672,
+        176,
         -80
       ],
       "id": "f5b7f23d-680a-4cf7-af7a-4cbf8d532738",
@@ -438,6 +318,126 @@
           "name": "Slack account"
         }
       }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2245bc49-e600-4838-96b5-c03c50aaacae",
+              "name": "action",
+              "value": "posted to #billing-alerts Slack channel",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        -272
+      ],
+      "id": "0cec07bd-744d-4e92-9ad8-ef389f7aa57b",
+      "name": "posted to #billing-alerts Slack channel"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2245bc49-e600-4838-96b5-c03c50aaacae",
+              "name": "action",
+              "value": "flagged for human review, severe bug",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        112
+      ],
+      "id": "4bbed335-1de8-4ffc-9086-475781101a29",
+      "name": "flagged for human review, severe bug"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "42678f42-82b4-4949-b612-de9ef34552c1",
+              "name": "action",
+              "value": "would tag @support-lead for human review",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        688
+      ],
+      "id": "609f166c-ea01-4c6e-86cb-f33173102850",
+      "name": "would tag @support-lead for human review"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "72c01a73-647d-4bda-aa4b-9a9a7421f541",
+              "name": "action",
+              "value": "flagged for manual categorization, no auto-draft sent",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        880
+      ],
+      "id": "dd7eaf30-ebdf-49e2-9576-1bea97e04f1d",
+      "name": "flagged for manual categorization, no auto-draft sent"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c673af68-9b11-4ae2-a45d-41b4c5726d20",
+              "name": "action",
+              "value": "auto-drafted response, no escalation needed",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        1072
+      ],
+      "id": "053fb06e-e4d2-4a49-b30a-6b6abd5a1e77",
+      "name": "auto-drafted response, no escalation needed"
     }
   ],
   "pinData": {},
@@ -473,14 +473,14 @@
             "index": 0
           },
           {
-            "node": "Edit Fields2",
+            "node": "posted to #billing-alerts Slack channel",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Edit Fields",
+            "node": "would tag @support-lead for human review",
             "type": "main",
             "index": 0
           }
@@ -492,7 +492,7 @@
             "index": 0
           },
           {
-            "node": "Edit Fields3",
+            "node": "flagged for manual categorization, no auto-draft sent",
             "type": "main",
             "index": 0
           }
@@ -504,36 +504,14 @@
             "index": 0
           },
           {
-            "node": "Edit Fields4",
+            "node": "flagged for human review, severe bug",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Edit Fields1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "Append row in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields1": {
-      "main": [
-        [
-          {
-            "node": "Append row in sheet",
+            "node": "auto-drafted response, no escalation needed",
             "type": "main",
             "index": 0
           }
@@ -545,42 +523,64 @@
         []
       ]
     },
-    "Edit Fields2": {
-      "main": [
-        [
-          {
-            "node": "Append row in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields3": {
-      "main": [
-        [
-          {
-            "node": "Append row in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields4": {
-      "main": [
-        [
-          {
-            "node": "Append row in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "#billing-alerts": {
       "main": [
         []
+      ]
+    },
+    "posted to #billing-alerts Slack channel": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "flagged for human review, severe bug": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "would tag @support-lead for human review": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "flagged for manual categorization, no auto-draft sent": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "auto-drafted response, no escalation needed": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -590,7 +590,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "5e37f9f0-40a5-41fc-a2dc-28511d206d56",
+  "versionId": "0286a5a9-0a7b-4e77-af30-04bdf68a0b2b",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "0b62203b239dd9374eb92287a8c78bb630416bb0e34c81946eab6e3bed300c46"
