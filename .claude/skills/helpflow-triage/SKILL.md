@@ -9,6 +9,7 @@ Given raw ticket text, output exactly this structure:
 
 - **category**: one of billing | bug-minor | bug-severe | how-to | churn-risk
 - **priority**: high | medium | low
+  - needs-human-review has no priority — output "n/a"
   - churn-risk is always high priority
   - bug-severe is high by default (bug tickets have the worst resolution rate in this dataset) — this covers anything with real functional impact (crashes, data loss, broken core features).
   - bug-minor is medium — reserved for cosmetic-only issues with no functional impact (e.g. font, color, spacing, alignment, wording/typos). A ticket merely mentioning the word "text" is not on its own a minor/cosmetic signal — look for an actual cosmetic defect.
@@ -17,3 +18,5 @@ Given raw ticket text, output exactly this structure:
 - **suggested_response_draft**: 2-3 sentence draft reply, empathetic tone, acknowledges the issue and states next step (do not promise specific resolution times)
 
 Do not guess category if the ticket is ambiguous — output category: "needs-human-review" instead and explain why in one line.
+
+If a ticket's language matches signals from more than one category, treat it as ambiguous and output "needs-human-review" — except churn-risk: if churn-risk signals are present alongside another category's signals, churn-risk always wins, since missing a real cancellation threat is the costlier mistake.
