@@ -10,8 +10,10 @@ That threshold is the whole design brief: get bug and churn-risk tickets a fast,
 
 ## How it works
 
-- **[`.claude/skills/helpflow-triage/`](.claude/skills/helpflow-triage)**: a Claude Code skill that takes raw ticket text and returns a category (`billing` / `bug` / `how-to` / `churn-risk` / `needs-human-review`), a priority, and a drafted response.
-- **[`HelpFlow.json`](HelpFlow.json)**: an n8n workflow that runs incoming tickets through the triage logic and routes them: billing and churn-risk post to Slack with a suggested draft attached; needs-human-review posts with no draft, flagged for manual categorization; bug splits into `bug-minor` (full-auto) and `bug-severe` (Slack alert, human review).
+- **[`.claude/skills/helpflow-triage/`](.claude/skills/helpflow-triage)**: a Claude Code skill that takes raw ticket text and returns a category (`billing` / `bug-minor` / `bug-severe` / `how-to` / `churn-risk` / `needs-human-review`), a priority, and a drafted response.
+- **[`HelpFlow.json`](HelpFlow.json)**: an n8n workflow that runs incoming tickets through the triage logic and routes them: billing, churn-risk, and `bug-severe` post to Slack with a suggested draft attached; needs-human-review posts with no draft, flagged for manual categorization; `bug-minor` and how-to are auto-drafted and logged with no escalation.
+
+The categorization logic inside `HelpFlow.json` is plain rules-based JS, standing in for a live Claude API call. There's no Anthropic API billing set up for this project, so it's a scripted mock of the same rules `SKILL.md` documents. The actual Claude reasoning runs when the skill itself is invoked (e.g. via Claude Code), not inside the deployed n8n workflow.
 
 There's no separate ticketing tool; tickets arrive as raw text and Slack is where a human sees and acts on the ones that need them. See [`playbook.md`](playbook.md) for the operator-facing runbook (what to do when a message lands in `#billing-alerts` vs `#needs-review`).
 
@@ -41,7 +43,7 @@ Full detail: `git log --oneline`.
 | `decision_table.md` | Which ticket types get full-auto / AI-drafts / AI-never, and why |
 | `playbook.md` | Problem statement, before/after target metric, and the operator runbook |
 | `.claude/skills/helpflow-triage/` | The Claude skill that categorizes and drafts responses |
-| `HelpFlow.json` | The n8n workflow that wires the skill's logic into Slack routing |
+| `HelpFlow.json` | The n8n workflow; reimplements the skill's rules as a JS mock and wires the result into Slack routing (no live Claude call; see "How it works" above) |
 
 ## Data & credentials
 

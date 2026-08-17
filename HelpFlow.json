@@ -20,7 +20,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const text = $json.body.text.toLowerCase();\nlet category, priority, note = null;\nconst churnSignals = ['cancel', 'competitor', 'evaluating alternatives', 'moving to'];\nconst billingSignals = ['charge', 'invoice', 'billed', 'refund', 'billing'];\nconst bugSignals = ['crash', 'broken', 'error', 'fails', 'bug', 'won\\'t load', 'stuck'];\nconst howtoSignals = ['how do i', 'how to', 'what is', \"what's the difference\"];\nconst isChurn = churnSignals.some(s => text.includes(s));\nconst isBilling = billingSignals.some(s => text.includes(s));\nconst isBug = bugSignals.some(s => text.includes(s));\nconst isHowto = howtoSignals.some(s => text.includes(s));\nconst matchCount = [isChurn, isBilling, isBug, isHowto].filter(Boolean).length;\nif (matchCount === 0 || matchCount > 1 && !isChurn) {\n  category = 'needs-human-review';\n  priority = 'n/a';\n  note = 'Ambiguous or no clear category signal — mocked logic, needs human judgment';\n} else if (isChurn) {\n  category = 'churn-risk';\n  priority = 'high';\n} else if (isBug) {\n  // bug is high by default (bug tickets have the worst resolution rate\n  // in this dataset). Downgrade to medium/minor only for cosmetic issues\n  // with no functional impact.\n  const isMinorCosmetic = text.includes('color') || text.includes('spacing') || text.includes('text') || text.includes('alignment');\n  category = isMinorCosmetic ? 'bug-minor' : 'bug-severe';\n  priority = isMinorCosmetic ? 'medium' : 'high';\n  note = isMinorCosmetic ? null : 'Severe bug: routed to human review rather than auto-drafted.';\n} else if (isBilling) {\n  category = 'billing';\n  priority = (text.includes('duplicate') || text.includes('twice') || text.includes('again')) ? 'high' : 'medium';\n} else {\n  category = 'how-to';\n  priority = 'low';\n}\nconst drafts = {\n  billing: `We're looking into the charge on your account and will follow up with a breakdown.`,\n  'bug-minor': `Thanks for flagging this - we've noted the issue and it will be reviewed by our team.`,\n  'bug-severe': `We're sorry for the trouble - this has been flagged for our engineering team.`,\n  'how-to': `Here's how to do that - check our help docs for step-by-step instructions.`,\n  'churn-risk': `We don't want to lose you - someone from our team will reach out personally.`\n};\nconst suggested_response_draft = drafts[category] || null;\nreturn {\n  json: {\n    id: $json.body.id || null,\n    text: $json.body.text,\n    category,\n    priority,\n    note,\n    suggested_response_draft\n  }\n};"
+        "jsCode": "const text = $json.body.text.toLowerCase();\nlet category, priority, note = null;\nconst churnSignals = ['cancel', 'competitor', 'evaluating alternatives', 'moving to'];\nconst billingSignals = ['charge', 'invoice', 'billed', 'refund', 'billing'];\nconst bugSignals = ['crash', 'broken', 'error', 'fails', 'bug', 'won\\'t load', 'stuck'];\nconst howtoSignals = ['how do i', 'how to', 'what is', \"what's the difference\"];\nconst isChurn = churnSignals.some(s => text.includes(s));\nconst isBilling = billingSignals.some(s => text.includes(s));\nconst isBug = bugSignals.some(s => text.includes(s));\nconst isHowto = howtoSignals.some(s => text.includes(s));\nconst matchCount = [isChurn, isBilling, isBug, isHowto].filter(Boolean).length;\nif (matchCount === 0 || matchCount > 1 && !isChurn) {\n  category = 'needs-human-review';\n  priority = 'n/a';\n  note = 'Ambiguous or no clear category signal — mocked logic, needs human judgment';\n} else if (isChurn) {\n  category = 'churn-risk';\n  priority = 'high';\n} else if (isBug) {\n  // bug is high by default (bug tickets have the worst resolution rate\n  // in this dataset). Downgrade to medium/minor only for cosmetic issues\n  // with no functional impact.\n  const isMinorCosmetic = text.includes('color') || text.includes('spacing') || text.includes('alignment') || text.includes('font') || text.includes('typo') || text.includes('wording');\n  category = isMinorCosmetic ? 'bug-minor' : 'bug-severe';\n  priority = isMinorCosmetic ? 'medium' : 'high';\n  note = isMinorCosmetic ? null : 'Severe bug: routed to human review rather than auto-drafted.';\n} else if (isBilling) {\n  category = 'billing';\n  priority = (text.includes('duplicate') || text.includes('twice') || text.includes('again')) ? 'high' : 'medium';\n} else {\n  category = 'how-to';\n  priority = 'low';\n}\nconst drafts = {\n  billing: `We're looking into the charge on your account and will follow up with a breakdown.`,\n  'bug-minor': `Thanks for flagging this - we've noted the issue and it will be reviewed by our team.`,\n  'bug-severe': `We're sorry for the trouble - this has been flagged for our engineering team.`,\n  'how-to': `Here's how to do that - check our help docs for step-by-step instructions.`,\n  'churn-risk': `We don't want to lose you - someone from our team will reach out personally.`\n};\nconst suggested_response_draft = drafts[category] || null;\nreturn {\n  json: {\n    id: $json.body.id || null,\n    text: $json.body.text,\n    category,\n    priority,\n    note,\n    suggested_response_draft\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -321,6 +321,33 @@
     },
     {
       "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#churn-risk-alerts",
+          "mode": "name"
+        },
+        "text": "=Churn-risk ticket: {{ $json.text }}\nSuggested response: {{ $json.suggested_response_draft }}\ncc @support-lead",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        176,
+        592
+      ],
+      "id": "1a6d5c2f-3e91-4b5a-9c0d-7f2e8a4b6d13",
+      "name": "#churn-risk-alerts",
+      "webhookId": "REDACTED",
+      "credentials": {
+        "slackApi": {
+          "id": "REDACTED",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
         "assignments": {
           "assignments": [
             {
@@ -374,7 +401,7 @@
             {
               "id": "42678f42-82b4-4949-b612-de9ef34552c1",
               "name": "action",
-              "value": "would tag @support-lead for human review",
+              "value": "posted to #churn-risk-alerts Slack channel",
               "type": "string"
             }
           ]
@@ -389,7 +416,7 @@
         688
       ],
       "id": "609f166c-ea01-4c6e-86cb-f33173102850",
-      "name": "would tag @support-lead for human review"
+      "name": "posted to #churn-risk-alerts Slack channel"
     },
     {
       "parameters": {
@@ -480,7 +507,12 @@
         ],
         [
           {
-            "node": "would tag @support-lead for human review",
+            "node": "#churn-risk-alerts",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "posted to #churn-risk-alerts Slack channel",
             "type": "main",
             "index": 0
           }
@@ -550,7 +582,12 @@
         ]
       ]
     },
-    "would tag @support-lead for human review": {
+    "#churn-risk-alerts": {
+      "main": [
+        []
+      ]
+    },
+    "posted to #churn-risk-alerts Slack channel": {
       "main": [
         [
           {

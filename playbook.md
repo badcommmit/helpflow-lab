@@ -10,7 +10,7 @@ Bug and churn-risk tickets currently sit at a 100 to 110 minute median time to f
 
 ## How the Flow Works
 
-When a ticket comes in, it's automatically categorized into billing, bug, how-to, churn-risk, or needs-human-review, with a priority assigned based on the language used. Billing and churn-risk tickets are posted to dedicated Slack channels with a suggested response ready to copy, edit, and send. Tickets the system can't confidently categorize are flagged separately for manual review, with no auto-draft attached. Bug and how-to tickets are auto-drafted with no escalation.
+When a ticket comes in, it's automatically categorized into billing, bug-minor, bug-severe, how-to, churn-risk, or needs-human-review, with a priority assigned based on the language used. Billing, churn-risk, and bug-severe tickets are posted to dedicated Slack channels with a suggested response ready to copy, edit, and send. Tickets the system can't confidently categorize are flagged separately for manual review, with no auto-draft attached. Bug-minor and how-to tickets are auto-drafted with no escalation.
 
 There is currently no separate ticketing tool. Tickets arrive as raw text and Slack is the operational surface where humans see and act on the ones that need them. If a real ticketing tool is added later, this flow would need to write back into it instead of just alerting, worth revisiting at that point.
 
@@ -20,4 +20,8 @@ There is currently no separate ticketing tool. Tickets arrive as raw text and Sl
 
 **When a message lands in `#needs-review`:** read the ticket text and the system's note explaining why it couldn't be categorized. Since there's no draft response, reply to the customer asking for clarification on what they need. Once they respond, resubmit the clarified ticket through the same automated intake, it may turn out to be a simple how-to or billing question the system can now handle without further human involvement, rather than assuming every needs-review ticket requires a human to see it through to resolution.
 
-Bug and how-to tickets are auto-drafted and logged with no action required from a human by default.
+**When a message lands in `#bug-alerts`:** this is a bug-severe ticket — real functional impact (crash, data loss, broken core feature), not a cosmetic issue. Read the ticket text and suggested response, verify it against the ticket, edit if needed, then reply to the customer and loop in engineering since this category has the worst historical resolution rate in the dataset.
+
+**When a message lands in `#churn-risk-alerts`:** the draft here is a starting point for the human conversation, not something to send as-is — read the ticket, use the draft to understand the system's read on the situation, then reach out personally (this category needs a human touch, not a copy-paste reply) and loop in `@support-lead`.
+
+Bug-minor and how-to tickets are auto-drafted and logged with no action required from a human by default.
